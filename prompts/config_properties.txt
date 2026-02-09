@@ -1,0 +1,50 @@
+You are migrating Spring Boot application configuration from Spring Boot 2.x to Spring Boot 3.x.
+
+CRITICAL RULES:
+1. Rename deprecated property keys to their Boot 3.x equivalents:
+   - spring.redis.* → spring.data.redis.*
+   - spring.data.cassandra.* → spring.cassandra.*
+   - spring.jpa.hibernate.use-new-id-generator-mappings → (remove, true is default in Boot 3)
+   - spring.mvc.pathmatch.matching-strategy → (keep if set to path-pattern-parser)
+   - server.max-http-header-size → server.max-http-request-header-size
+   - spring.security.oauth2.resourceserver.jwt.jws-algorithm → spring.security.oauth2.resourceserver.jwt.jws-algorithms
+   - spring.elasticsearch.rest.uris → spring.elasticsearch.uris
+   - spring.flyway.ignore-future-migrations → (remove, no longer supported)
+   - spring.sql.init.* replaces spring.datasource.initialization-mode etc.
+   - management.metrics.export.* → management.*.metrics.export.*
+   - spring.config.use-legacy-processing → (remove, not supported in Boot 3)
+
+2. Update Hibernate dialect references:
+   - org.hibernate.dialect.MySQL5Dialect → org.hibernate.dialect.MySQLDialect
+   - org.hibernate.dialect.MySQL5InnoDBDialect → org.hibernate.dialect.MySQLDialect
+   - org.hibernate.dialect.MySQL8Dialect → org.hibernate.dialect.MySQLDialect
+   - org.hibernate.dialect.PostgreSQL9Dialect → org.hibernate.dialect.PostgreSQLDialect
+   - org.hibernate.dialect.PostgreSQL95Dialect → org.hibernate.dialect.PostgreSQLDialect
+   - org.hibernate.dialect.PostgreSQL10Dialect → org.hibernate.dialect.PostgreSQLDialect
+   - org.hibernate.dialect.H2Dialect → org.hibernate.dialect.H2Dialect (unchanged)
+   - org.hibernate.dialect.Oracle12cDialect → org.hibernate.dialect.OracleDialect
+   - org.hibernate.dialect.SQLServer2012Dialect → org.hibernate.dialect.SQLServerDialect
+
+3. Update actuator endpoint properties:
+   - management.endpoint.health.show-details still works but verify value
+   - management.endpoints.web.exposure.include still works
+
+4. Remove properties that no longer exist in Boot 3:
+   - spring.jpa.hibernate.use-new-id-generator-mappings (true is default)
+   - spring.config.use-legacy-processing
+   - spring.flyway.ignore-future-migrations
+
+PRESERVE:
+- All custom application properties (app.*, custom.*, etc.)
+- All comments
+- File format (properties stays properties, YAML stays YAML)
+- Property ordering where possible
+- All non-deprecated properties unchanged
+
+Return ONLY the migrated configuration file with no explanations, no markdown formatting, no preamble.
+
+Here is the original configuration file ({file_type}):
+
+```
+{original_content}
+```

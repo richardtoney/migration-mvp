@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+
+# Environment
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Test projects (external repos, large)
+test-projects/
+
+# Build artifacts
+*.log
+target/
+*.class
+
+# Generated metrics
+phase5_metrics.json
+phase6_metrics.json
+
+# Backups from migration
+*.bak

@@ -1,0 +1,49 @@
+You are migrating Hibernate usage from Hibernate 5.x (Spring Boot 2.x) to Hibernate 6.x (Spring Boot 3.x).
+
+CRITICAL RULES:
+1. Replace @Type annotations:
+   - @Type(type = "json") or @Type(type = "jsonb") → @JdbcTypeCode(SqlTypes.JSON) and import org.hibernate.annotations.JdbcTypeCode and org.hibernate.type.SqlTypes
+   - @Type(type = "uuid-char") → @JdbcTypeCode(SqlTypes.VARCHAR) (UUID stored as string)
+   - @Type(type = "uuid-binary") → (remove, UUID native type is default in Hibernate 6)
+   - @Type(type = "yes_no") → @Convert(converter = YesNoConverter.class) and import jakarta.persistence.Convert and org.hibernate.type.YesNoConverter
+   - @Type(type = "numeric_boolean") → @Convert(converter = NumericBooleanConverter.class)
+   - @Type(type = "text") → @JdbcTypeCode(SqlTypes.LONGVARCHAR)
+   - Custom @Type(type = "com.example.CustomType") → see rule 3
+
+2. Remove @TypeDef and @TypeDefs annotations entirely:
+   - @TypeDef(name = "json", typeClass = JsonType.class) → remove
+   - @TypeDefs({...}) → remove
+   - The replacement @JdbcTypeCode goes on the field directly
+
+3. Custom UserType implementations:
+   - Classes implementing org.hibernate.usertype.UserType must be updated
+   - UserType interface changed: sqlTypes() → getSqlType(), returnedClass() stays
+   - nullSafeGet/nullSafeSet signatures changed (no SharedSessionContractImplementor names param)
+
+4. Dialect references in Java code:
+   - org.hibernate.dialect.MySQL5Dialect → org.hibernate.dialect.MySQLDialect
+   - org.hibernate.dialect.MySQL5InnoDBDialect → org.hibernate.dialect.MySQLDialect
+   - org.hibernate.dialect.PostgreSQL9Dialect → org.hibernate.dialect.PostgreSQLDialect
+   - org.hibernate.dialect.PostgreSQL95Dialect → org.hibernate.dialect.PostgreSQLDialect
+   - org.hibernate.dialect.Oracle12cDialect → org.hibernate.dialect.OracleDialect
+   - org.hibernate.dialect.SQLServer2012Dialect → org.hibernate.dialect.SQLServerDialect
+
+5. javax.persistence.* → jakarta.persistence.* (all JPA imports)
+
+6. org.hibernate.annotations.Type → remove import if no longer used
+
+PRESERVE:
+- All entity field names and types
+- All @Column, @Id, @GeneratedValue annotations
+- All relationship annotations (@OneToMany, @ManyToOne, etc.)
+- All other JPA annotations
+- Class structure and package declarations
+
+Return the COMPLETE class including all imports, annotations, and the closing brace.
+Return ONLY the migrated Java code with no explanations, no markdown formatting, no preamble.
+
+Here is the original Java file:
+
+```java
+{original_code}
+```

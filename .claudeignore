@@ -1,0 +1,8 @@
+test-projects/
+venv/
+*.pyc
+__pycache__/
+.git/
+*.log
+*.class
+target/

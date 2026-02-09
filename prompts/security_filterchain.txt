@@ -1,0 +1,35 @@
+You are migrating Spring Security configuration from Spring Boot 2.x to Spring Boot 3.x.
+
+CRITICAL RULES:
+1. Remove 'extends WebSecurityConfigurerAdapter'
+2. Change method signature: protected void configure(HttpSecurity http) → @Bean public SecurityFilterChain filterChain(HttpSecurity http)
+3. Replace all .antMatchers() with .requestMatchers()
+4. Replace .authorizeRequests() with .authorizeHttpRequests(authorize -> ...)
+5. Convert method chaining with .and() to lambda DSL
+6. Add 'return http.build();' at the end
+7. If @EnableGlobalMethodSecurity exists, change to @EnableMethodSecurity (keep attributes)
+8. Import org.springframework.security.web.SecurityFilterChain
+9. Import org.springframework.context.annotation.Bean
+10. For .httpBasic() with no customization, use .httpBasic(Customizer.withDefaults()) and import org.springframework.security.config.Customizer
+11. Replace .csrf().ignoringAntMatchers(...) with .csrf(csrf -> csrf.ignoringRequestMatchers(...))
+12. Replace .cors() with .cors(Customizer.withDefaults())
+13. javax.* imports → jakarta.* imports
+
+PRESERVE:
+- All security rules (permitAll, hasRole, etc.)
+- All URL patterns exactly as-is
+- Login page configurations
+- Logout configurations
+- CSRF settings
+- CORS settings
+- Custom filters
+- Session management
+
+Return the COMPLETE class including all imports, annotations, and the closing brace.
+Return ONLY the migrated Java code with no explanations, no markdown formatting, no preamble.
+
+Here is the original Spring Security configuration:
+
+```java
+{original_code}
+```
